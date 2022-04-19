@@ -23,7 +23,7 @@
     block: |
       #!/bin/sh
       export PATH=/usr/local/lib/nodejs/node-{{ version }}-{{ distro }}/bin:$PATH
-
+  handlers: Reload
 - name: Install pm2
   shell: |
     npm i -g pm2
