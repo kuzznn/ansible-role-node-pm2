@@ -1,0 +1,37 @@
+---
+- name: Insert repo node {{ version }}
+  get_url:
+    url: https://nodejs.org/dist/{{ version }}/node-{{ version }}-{{ distro }}.tar.gz
+    dest: /tmp
+
+- name: Make folder 
+  file:
+    path: /usr/local/lib/nodejs
+    state: directory
+    mode: '0755'
+
+- name: Uncompress node
+  unarchive:
+    src: /tmp/node-{{ version }}-{{ distro }}.tar.gz
+    dest: /usr/local/lib/nodejs
+    remote_src: true
+ 
+- name: Create file node.sh
+  blockinfile:
+    path: /etc/profile.d/node.sh
+    create: yes
+    block: |
+      #!/bin/sh
+      export PATH=/usr/local/lib/nodejs/node-{{ version }}-{{ distro }}/bin:$PATH
+
+- name: Install pm2
+  shell: |
+    npm i -g pm2
+    pm2 link {{ secret_key }} {{ public_key }}
+
+- name: Clean tmp
+  file:
+    path: /tmp/node-{{ version }}-{{ distro }}.tar.gz
+    state: absent
+
+
