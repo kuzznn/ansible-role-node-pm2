@@ -23,11 +23,16 @@
     block: |
       #!/bin/sh
       export PATH=/usr/local/lib/nodejs/node-{{ version }}-{{ distro }}/bin:$PATH
-  handlers: Reload
+
+- name: Symlink
+  command: "ln -s /usr/local/lib/nodejs/node-{{ version }}-{{ distro }}/bin/{{ item }} /usr/bin/{{ item }}"
+  loop:
+  - node
+  - npm
+  - npx
+  - corepack
 - name: Install pm2
-  shell: |
-    npm i -g pm2
-    pm2 link {{ secret_key }} {{ public_key }}
+  command: npm i -g pm2
 
 - name: Clean tmp
   file:
