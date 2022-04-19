@@ -31,6 +31,8 @@
   - npm
   - npx
   - corepack
+  ignore_errors: yes
+  
 - name: Install pm2
   command: npm i -g pm2
 
